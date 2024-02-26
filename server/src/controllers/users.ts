@@ -9,7 +9,7 @@ import { ExpressRequestInterface } from "../types/expressRequest.interface";
 const normalizeUser = (user: UserDocument) => {
   const {email, username, id} = user;
   const token = jwt.sign({id, email}, secret)
-  return { email, username, id, token}
+  return { email, username, id, token: `Bearer ${token}`}
 }
 
 export const register = async (
