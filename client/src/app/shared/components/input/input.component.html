@@ -1,0 +1,19 @@
+<div class="form-control" [class.invalid]="!isValid()">
+  <label *ngIf="label" [for]="inputId" [class.required]="isRequired">{{ label }}</label>
+  <input
+    [required]="isRequired"
+    [type]="type"
+    [id]="inputId"
+    [formControl]="$any(control)"
+    [placeholder]="placeholder"
+    autocomplete="on"
+  />
+
+  <app-validation-errors
+    *ngIf="!isValid()"
+    [errors]="control!.errors"
+    [controlName]="formControlName"
+    [control]="$any(control)"
+  >
+  </app-validation-errors>
+</div>
