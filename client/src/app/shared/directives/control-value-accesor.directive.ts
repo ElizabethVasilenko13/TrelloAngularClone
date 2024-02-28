@@ -1,4 +1,4 @@
-import { DestroyRef, Directive, Inject, Injector, OnInit } from '@angular/core';
+import { Directive, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -8,24 +8,21 @@ import {
   NgControl,
   Validators
 } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { distinctUntilChanged, startWith, tap } from 'rxjs';
+import { Subject, distinctUntilChanged, startWith, takeUntil, tap } from 'rxjs';
 
 @Directive({
   selector: '[appControlValueAccesor]',
   standalone: true
 })
-export class ControlValueAccesorDirective<T> implements ControlValueAccessor, OnInit {
+export class ControlValueAccesorDirective<T> implements ControlValueAccessor, OnInit, OnDestroy {
   control: FormControl | undefined;
   isRequired = false;
 
   private _isDisabled = false;
   private _onTouched!: () => T;
+  private _destroy$ = new Subject<void>();
 
-  constructor(
-    @Inject(Injector) private injector: Injector,
-    private destroyRef: DestroyRef
-  ) {}
+  constructor(@Inject(Injector) private injector: Injector) {}
 
   ngOnInit(): void {
     this.setFormControl();
@@ -58,7 +55,7 @@ export class ControlValueAccesorDirective<T> implements ControlValueAccessor, On
   registerOnChange(fn: (val: T | null) => T): void {
     this.control?.valueChanges
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
+        takeUntil(this._destroy$),
         startWith(this.control.value),
         distinctUntilChanged(),
         tap((val) => fn(val))
@@ -82,5 +79,10 @@ export class ControlValueAccesorDirective<T> implements ControlValueAccessor, On
       return true;
     }
     return this.control.valid && (this.control.dirty || this.control.touched);
+  }
+
+  ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 }
