@@ -49,7 +49,11 @@ export class ControlValueAccesorDirective<T> implements ControlValueAccessor, On
   }
 
   writeValue(value: T): void {
-    this.control ? this.control.setValue(value) : (this.control = new FormControl(value));
+    if (this.control && this.control.value !== value) {
+      this.control.setValue(value);
+    } else if (!this.control) {
+      this.control = new FormControl(value);
+    }
   }
 
   registerOnChange(fn: (val: T | null) => T): void {
@@ -71,14 +75,15 @@ export class ControlValueAccesorDirective<T> implements ControlValueAccessor, On
     this._isDisabled = isDisabled;
   }
 
-  protected isValid(): boolean {
+  protected isInValid(): boolean {
     if (!this.control) {
-      return true;
+      return false;
     }
     if (!this.control.touched) {
-      return true;
+      return false;
     }
-    return this.control.valid && (this.control.dirty || this.control.touched);
+
+    return this.control.invalid && (this.control.dirty || this.control.touched);
   }
 
   ngOnDestroy(): void {

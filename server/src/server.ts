@@ -15,12 +15,15 @@ app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-
 app.get('/' , (req, res) => {
   res.send("Api is UP");
 });
 
 app.post('/api/users/register', usersController.register);
+// app.post('/api/users/register', () => {console.log('request');
+// });
+
+
 app.post('/api/users/login', usersController.login);
 app.get('/api/user', authMiddleware, usersController.currentUser);
 
@@ -32,7 +35,7 @@ mongoose.connect('mongodb://localhost:27017/trelloClone').then(() => {
   console.log('connected');
 
   httpServer.listen(4001, () => {
-    console.log("Api is listening on port 4000");
+    console.log("Api is listening on port 4001");
   });
 })
 

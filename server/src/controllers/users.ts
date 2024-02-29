@@ -5,6 +5,7 @@ import { Error } from "mongoose";
 import jwt from "jsonwebtoken";
 import { secret } from "../config";
 import { ExpressRequestInterface } from "../types/expressRequest.interface";
+import { log } from 'console';
 
 const normalizeUser = (user: UserDocument) => {
   const {email, username, id} = user;
@@ -44,15 +45,20 @@ export const login = async (
     const errors = {
       emailOrPassword: 'Incorrect email or password'
     }
+
     if (!user) {
+      console.log('no user');
       return res.status(422).json(errors)
     }
 
     const isTheSamePassword = await user.validatePassword(password);
 
     if (!isTheSamePassword) {
+      console.log('no pas');
+
       return res.status(422).json(errors)
     }
+    console.log(user);
 
     res.send(normalizeUser(user))
   } catch (err) {

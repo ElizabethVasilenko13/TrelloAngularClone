@@ -1,4 +1,4 @@
-<div class="form-control" [class.invalid]="!isValid()">
+<div class="form-control" [class.invalid]="isInValid()">
   <label *ngIf="label" [for]="inputId" [class.required]="isRequired">{{ label }}</label>
   <input
     [required]="isRequired"
@@ -10,7 +10,7 @@
   />
 
   <app-validation-errors
-    *ngIf="!isValid()"
+    *ngIf="isInValid()"
     [errors]="control!.errors"
     [controlName]="formControlName"
     [control]="$any(control)"

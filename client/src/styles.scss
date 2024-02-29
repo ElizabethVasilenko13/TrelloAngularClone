@@ -11,3 +11,18 @@
 @import './styles/editBoardForm.scss';
 @import './styles/taskModal.scss';
 @import './styles/columnSelect.scss';
+
+.backend-errors {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+
+button {
+
+  &:disabled{
+    pointer-events: none;
+    background-color: grey;
+  }
+}

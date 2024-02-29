@@ -26,12 +26,11 @@ const userSchema = new Schema<UserDocument>({
 );
 
 userSchema.pre('save', async function (next) {
-  if(!this.isModified('password')) {
+  if (!this.isModified('password')) {
     return next();
   }
-
   try {
-    const salt = await bcryptjs.genSalt(10);
+    const salt = await bcryptjs.genSalt(12);
     this.password = await bcryptjs.hash(this.password, salt);
     return next();
   } catch (err) {
@@ -39,8 +38,10 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-userSchema.methods.validatePassword = function (password: string) {
-  return bcryptjs.compare(password, this.password)
-}
+userSchema.methods.validatePassword = async function (
+  password: string
+): Promise<boolean> {
+  return await bcryptjs.compare(password, this.password);
+};
 
 export default model<UserDocument>('User', userSchema);

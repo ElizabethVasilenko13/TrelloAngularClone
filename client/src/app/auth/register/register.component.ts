@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputComponent } from '@shared/components/input/input.component';
+import { AuthApiService } from '../services/auth-api.service';
+import { RegisterRequestInterface } from '../models/auth.requests.interface';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +14,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder);
+  protected authService = inject(AuthApiService);
 
   registrationForm = this.fb.group({
     username: [
@@ -30,13 +33,10 @@ export class RegisterComponent {
   });
 
   onSubmit(): void {
-    const userData = this.registrationForm.value;
-    console.log(userData);
+    if (this.registrationForm.invalid) return;
+    const userData = this.registrationForm.value as RegisterRequestInterface;
+    this.authService.onRegisterFormSubmit(userData);
     this.registrationForm.reset();
+    this.registrationForm.setErrors(null);
   }
-
-  // onSubmit() {
-  //   if (!this.formRegister.valid) return;
-  //   this.loginService.onSubmit(this.formRegister);
-  // }
 }

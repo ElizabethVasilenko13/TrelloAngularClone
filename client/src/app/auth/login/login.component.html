@@ -17,7 +17,8 @@
         inputId="password"
         formControlName="password"
       ></app-input>
-      <button type="submit" class="login-submit-button">Login</button>
+      <div class="backend-errors" *ngIf="authService.backendErrors$">{{ authService.backendErrors$| async }}</div>
+      <button [disabled]="loginForm.invalid" type="submit" class="login-submit-button">Login</button>
     </form>
     <div class="bottom-form-links">
       <a routerLink="/register" class="register-link">Sign up</a>

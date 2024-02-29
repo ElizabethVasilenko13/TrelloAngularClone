@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputComponent } from '@shared/components/input/input.component';
+import { AuthApiService } from '../services/auth-api.service';
+import { LoginRequestInterface } from '../models/auth.requests.interface';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +14,9 @@ import { InputComponent } from '@shared/components/input/input.component';
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
+  protected authService = inject(AuthApiService);
 
   loginForm = this.fb.group({
-    username: [
-      '',
-      [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]+$/)]
-    ],
     email: ['', [Validators.required, Validators.email]],
     password: [
       '',
@@ -30,8 +29,10 @@ export class LoginComponent {
   });
 
   onSubmit(): void {
-    const userData = this.loginForm.value;
-    console.log(userData);
+    if (this.loginForm.invalid) return;
+    const userData = this.loginForm.value as LoginRequestInterface;
+    this.authService.onLoginFormSubmit(userData);
     this.loginForm.reset();
+    this.loginForm.setErrors(null);
   }
 }
