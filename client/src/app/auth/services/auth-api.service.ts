@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, filter, map, take } from 'rxjs';
 import { LoginRequestInterface, RegisterRequestInterface } from '../models/auth.requests.interface';
@@ -17,6 +17,11 @@ interface AuthApiMethods {
 export class AuthApiService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private handler = inject(HttpBackend);
+
+  constructor() {
+    this.http = new HttpClient(this.handler);
+  }
 
   private readonly AUTH_API_URL = `${environment.apiUrl}users/`;
   private readonly REGISTER_ENDPOINT = `register`;
@@ -82,6 +87,7 @@ export class AuthApiService {
   }
 
   setToken(currentUser: User): void {
-    localStorage.setItem('token', currentUser.token);
+    const [, exstractedToken] = currentUser.token.split(' ');
+    localStorage.setItem('token', exstractedToken);
   }
 }

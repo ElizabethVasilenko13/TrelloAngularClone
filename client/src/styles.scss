@@ -18,10 +18,8 @@
   margin-bottom: 10px;
 }
 
-
 button {
-
-  &:disabled{
+  &:disabled {
     pointer-events: none;
     background-color: grey;
   }
