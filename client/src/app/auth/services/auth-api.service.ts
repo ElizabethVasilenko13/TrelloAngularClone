@@ -6,11 +6,6 @@ import { environment } from '@environment/environment';
 import { User } from '../models/user.interface';
 import { Router } from '@angular/router';
 
-interface AuthApiMethods {
-  register: (data: RegisterRequestInterface) => Observable<User>;
-  login: (data: LoginRequestInterface) => Observable<User>;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -27,17 +22,12 @@ export class AuthApiService {
   private readonly REGISTER_ENDPOINT = `register`;
   private readonly LOGIN_ENDPOINT = `login`;
 
-  protected currentUser$ = new BehaviorSubject<User | null | undefined>(undefined);
+  public currentUser$ = new BehaviorSubject<User | null | undefined>(undefined);
   public isLoggedIn$ = this.currentUser$.pipe(
     filter((user) => user !== undefined),
     map(Boolean)
   );
   public backendErrors$ = new BehaviorSubject<string[] | null>(null);
-
-  methods: AuthApiMethods = {
-    register: (data: RegisterRequestInterface) => this.register(data),
-    login: (data: LoginRequestInterface) => this.login(data)
-  };
 
   register(data: RegisterRequestInterface): Observable<User> {
     const url = `${this.AUTH_API_URL}${this.REGISTER_ENDPOINT}`;
@@ -47,6 +37,11 @@ export class AuthApiService {
   login(data: LoginRequestInterface): Observable<User> {
     const url = `${this.AUTH_API_URL}${this.LOGIN_ENDPOINT}`;
     return this.http.post<User>(url, data);
+  }
+
+  getCurrentUser(): Observable<User> {
+    const url = environment.apiUrl + 'user';
+    return this.http.get<User>(url);
   }
 
   onRegisterFormSubmit(currentUser: RegisterRequestInterface): void {

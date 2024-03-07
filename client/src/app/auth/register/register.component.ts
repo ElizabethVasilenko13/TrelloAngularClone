@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { RegisterRequestInterface } from '../models/auth.requests.interface';
   imports: [CommonModule, RouterModule, ReactiveFormsModule, InputComponent],
   templateUrl: './register.component.html'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private fb = inject(FormBuilder);
   protected authService = inject(AuthApiService);
 
@@ -31,6 +31,10 @@ export class RegisterComponent {
       ]
     ]
   });
+
+  ngOnInit(): void {
+    this.authService.backendErrors$.next(null);
+  }
 
   onSubmit(): void {
     if (this.registrationForm.invalid) return;
