@@ -5,11 +5,12 @@ import { BoardInterface } from '@shared/models/boards.interface';
 import { take } from 'rxjs';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { InlineFormComponent } from '@shared/components/inline-form/inline-form.component';
+import { TopbarComponent } from '@shared/components/topbar/topbar.component';
 
 @Component({
   selector: 'app-boards-page',
   standalone: true,
-  imports: [CommonModule, RouterLinkActive, InlineFormComponent, RouterLink],
+  imports: [CommonModule, RouterLinkActive, InlineFormComponent, RouterLink, TopbarComponent],
   templateUrl: './boards-page.component.html'
 })
 export class BoardsPageComponent implements OnInit {

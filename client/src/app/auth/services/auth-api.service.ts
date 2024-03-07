@@ -80,4 +80,9 @@ export class AuthApiService {
     const [, exstractedToken] = currentUser.token.split(' ');
     localStorage.setItem('token', exstractedToken);
   }
+
+  logout(): void {
+    this.setCurrentUser(null);
+    localStorage.removeItem('token');
+  }
 }
