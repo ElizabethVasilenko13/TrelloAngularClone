@@ -1,4 +1,4 @@
-import { HttpBackend, HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, filter, map, take } from 'rxjs';
 import { LoginRequestInterface, RegisterRequestInterface } from '../models/auth.requests.interface';
@@ -12,11 +12,6 @@ import { Router } from '@angular/router';
 export class AuthApiService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private handler = inject(HttpBackend);
-
-  constructor() {
-    this.http = new HttpClient(this.handler);
-  }
 
   private readonly AUTH_API_URL = `${environment.apiUrl}users/`;
   private readonly REGISTER_ENDPOINT = `register`;
