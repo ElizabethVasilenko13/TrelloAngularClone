@@ -29,9 +29,9 @@ export class InlineFormComponent {
   });
 
   activateEditing(): void {
-    // if (this.title) {
-    //   this.form.patchValue({ title: this.title });
-    // }
+    if (this.title) {
+      this.form.patchValue({ title: this.title });
+    }
 
     this.isEditingMode = true;
   }

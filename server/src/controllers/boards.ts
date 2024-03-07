@@ -17,3 +17,27 @@ export const getBoards = async (
     next(err);
   }
 }
+
+export const cretateBoard = async (
+  req: ExpressRequestInterface,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.user) {
+      return res.status(401);
+    }
+
+    console.log(
+
+      'f'
+    );
+    
+    const { title } = req.body;
+    const board = new BoardModel({title, userId: req.user.id})
+    const savedBoard = await board.save();
+    res.send(savedBoard);
+  } catch (err) {
+    next(err);
+  }
+}

@@ -8,13 +8,17 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthApiService {
+export class BoardsService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
   private readonly BOARDS_API_URL = `${environment.apiUrl}boards/`;
 
-  getBoards(): Observable<BoardInterface> {
-    return this.http.get<BoardInterface>(this.BOARDS_API_URL);
+  getBoards(): Observable<BoardInterface[]> {
+    return this.http.get<BoardInterface[]>(this.BOARDS_API_URL);
+  }
+
+  createBoard(title: string): Observable<BoardInterface> {
+    return this.http.post<BoardInterface>(this.BOARDS_API_URL, { title });
   }
 }
